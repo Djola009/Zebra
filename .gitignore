@@ -12,6 +12,11 @@ dist
 dist-ssr
 *.local
 
+# Volta symlinks
+node
+npm
+npx
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
