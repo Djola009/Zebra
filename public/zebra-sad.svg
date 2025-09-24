@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#eef2f7"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="24" fill="url(#g2)"/>
+  <!-- Zebra head -->
+  <ellipse cx="100" cy="110" rx="60" ry="55" fill="#fff" stroke="#222" stroke-width="4"/>
+  <!-- Ears -->
+  <path d="M65 55 l-12 -30 a6 6 0 0 1 10 -7 l18 28 z" fill="#fff" stroke="#222" stroke-width="4"/>
+  <path d="M135 55 l12 -30 a6 6 0 0 0 -10 -7 l-18 28 z" fill="#fff" stroke="#222" stroke-width="4"/>
+  <!-- Stripes -->
+  <path d="M100 55 v40" stroke="#222" stroke-width="8"/>
+  <path d="M80 58 v36" stroke="#222" stroke-width="6"/>
+  <path d="M120 58 v36" stroke="#222" stroke-width="6"/>
+  <!-- Eyes -->
+  <circle cx="80" cy="105" r="6" fill="#222"/>
+  <circle cx="120" cy="105" r="6" fill="#222"/>
+  <!-- Frown -->
+  <path d="M75 140 q25 -20 50 0" fill="none" stroke="#ef4444" stroke-width="6" stroke-linecap="round"/>
+  <!-- Nose -->
+  <ellipse cx="100" cy="120" rx="12" ry="8" fill="#eee" stroke="#222" stroke-width="3"/>
+</svg>
+
+
