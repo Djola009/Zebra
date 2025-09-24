@@ -142,7 +142,7 @@ export default function App() {
       <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', padding: 16 }}>
         <div style={{ textAlign: 'center' }}>
           <img
-            src={score / total >= 0.6 ? '/zebra-happy.svg' : '/zebra-sad.svg'}
+            src={score / total >= 0.6 ? './zebra-happy.svg' : './zebra-sad.svg'}
             alt={score / total >= 0.6 ? 'Happy zebra' : 'Sad zebra'}
             style={{ width: 200, height: 'auto', marginBottom: 12 }}
           />
@@ -173,7 +173,7 @@ export default function App() {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 16 }}>
         <div style={{ textAlign: 'center', maxWidth: 500 }}>
-          <img src="/zebra-welcome.svg" alt="Zebra" style={{ width: 180, height: 'auto', marginBottom: 20 }} />
+          <img src="./zebra-welcome.svg" alt="Zebra" style={{ width: 180, height: 'auto', marginBottom: 20 }} />
           <div style={{ fontSize: 28, fontWeight: 800, marginBottom: 8 }}>Welcome!</div>
           <div style={{ fontSize: 16, color: '#374151', marginBottom: 24 }}>
             Let's get you set up for the Zebra Stripes Math Challenge
@@ -275,7 +275,7 @@ export default function App() {
         {/* Center - Main content */}
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <div style={{ textAlign: 'center', maxWidth: 600 }}>
-            <img src="/zebra-welcome.svg" alt="Zebra" style={{ width: 220, height: 'auto', marginBottom: 12 }} />
+            <img src="./zebra-welcome.svg" alt="Zebra" style={{ width: 220, height: 'auto', marginBottom: 12 }} />
             <div style={{ fontSize: 30, fontWeight: 800, marginBottom: 10 }}>Zebra Stripes Math Challenge</div>
             
             <div style={{ fontSize: 16, color: '#374151', marginBottom: 20 }}>
