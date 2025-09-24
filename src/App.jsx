@@ -16,17 +16,17 @@ function renderGradeLeaderboard(grade, entries) {
   if (entries.length === 0) return null;
   
   return (
-    <div key={grade} style={{ background: '#f8fafc', borderRadius: 8, padding: 10, marginBottom: 12 }}>
-      <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 6, color: '#374151' }}>
+    <div key={grade} style={{ background: '#f8fafc', borderRadius: 8, padding: 14, marginBottom: 16 }}>
+      <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 8, color: '#374151' }}>
         Grade {grade}
       </div>
-      <div style={{ display: 'grid', gap: 1, fontSize: 11 }}>
+      <div style={{ display: 'grid', gap: 3, fontSize: 13 }}>
         {entries.map((entry, i) => (
-          <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 0' }}>
             <span style={{ fontWeight: i < 3 ? 600 : 400 }}>
               {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i + 1}.`} {entry.name}
             </span>
-            <span style={{ color: '#6b7280' }}>
+            <span style={{ color: '#6b7280', fontSize: 12 }}>
               {entry.score}/{entry.total}
             </span>
           </div>
@@ -289,9 +289,9 @@ export default function App() {
     return (
       <div style={{ minHeight: '100vh', padding: 16, position: 'relative' }}>
         {/* Left side - Grades 7-9 Leaderboards */}
-        <div style={{ position: 'fixed', left: 16, top: 16, width: '180px', zIndex: 10 }}>
-          <div style={{ background: '#f8fafc', borderRadius: 8, padding: 12 }}>
-            <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 8, color: '#374151' }}>🏆 Grades 7-9</div>
+        <div style={{ position: 'fixed', left: 16, top: 16, width: '240px', zIndex: 10 }}>
+          <div style={{ background: '#f8fafc', borderRadius: 8, padding: 16 }}>
+            <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 12, color: '#374151' }}>🏆 Grades 7-9</div>
             {leftGrades.map(gradeNum => {
               const entries = getLeaderboardForGrade(leaderboard, gradeNum);
               return renderGradeLeaderboard(gradeNum, entries);
@@ -300,9 +300,9 @@ export default function App() {
         </div>
 
         {/* Right side - Grades 10-12 Leaderboards */}
-        <div style={{ position: 'fixed', right: 16, top: 16, width: '180px', zIndex: 10 }}>
-          <div style={{ background: '#f8fafc', borderRadius: 8, padding: 12 }}>
-            <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 8, color: '#374151' }}>🏆 Grades 10-12</div>
+        <div style={{ position: 'fixed', right: 16, top: 16, width: '240px', zIndex: 10 }}>
+          <div style={{ background: '#f8fafc', borderRadius: 8, padding: 16 }}>
+            <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 12, color: '#374151' }}>🏆 Grades 10-12</div>
             {rightGrades.map(gradeNum => {
               const entries = getLeaderboardForGrade(leaderboard, gradeNum);
               return renderGradeLeaderboard(gradeNum, entries);
