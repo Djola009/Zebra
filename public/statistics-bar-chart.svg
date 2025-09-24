@@ -1,0 +1,18 @@
+<svg width="200" height="150" viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
+  <!-- Axes -->
+  <line x1="30" y1="130" x2="180" y2="130" stroke="#374151" stroke-width="1"/>
+  <line x1="30" y1="130" x2="30" y2="20" stroke="#374151" stroke-width="1"/>
+  
+  <!-- Bars -->
+  <rect x="40" y="100" width="20" height="30" fill="#2563eb"/>
+  <rect x="70" y="80" width="20" height="50" fill="#2563eb"/>
+  <rect x="100" y="60" width="20" height="70" fill="#2563eb"/>
+  <rect x="130" y="90" width="20" height="40" fill="#2563eb"/>
+  
+  <!-- Labels -->
+  <text x="50" y="145" text-anchor="middle" font-family="Arial" font-size="10" fill="#374151">A</text>
+  <text x="80" y="145" text-anchor="middle" font-family="Arial" font-size="10" fill="#374151">B</text>
+  <text x="110" y="145" text-anchor="middle" font-family="Arial" font-size="10" fill="#374151">C</text>
+  <text x="140" y="145" text-anchor="middle" font-family="Arial" font-size="10" fill="#374151">D</text>
+  <text x="100" y="10" text-anchor="middle" font-family="Arial" font-size="12" fill="#374151">Find the mean</text>
+</svg>
