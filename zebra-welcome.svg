@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 140">
+  <!-- canvas background -->
+  <rect width="240" height="140" rx="16" fill="#ffffff"/>
+
+  <!-- Simple side-profile zebra -->
+  <g transform="translate(18,20)">
+    <!-- body -->
+    <ellipse cx="110" cy="55" rx="70" ry="40" fill="#ffffff" stroke="#111827" stroke-width="3"/>
+
+    <!-- stripes on body -->
+    <g stroke="#111827" stroke-width="8" stroke-linecap="round">
+      <path d="M70 30 v50"/>
+      <path d="M88 28 v54"/>
+      <path d="M106 26 v58"/>
+      <path d="M124 28 v54"/>
+      <path d="M142 30 v50"/>
+    </g>
+
+    <!-- head -->
+    <g transform="translate(28,2)">
+      <ellipse cx="42" cy="46" rx="22" ry="18" fill="#fff" stroke="#111827" stroke-width="3"/>
+      <!-- ears -->
+      <path d="M30 22 l-8 -14 a5 5 0 0 1 8 -5 l8 13 z" fill="#fff" stroke="#111827" stroke-width="3"/>
+      <path d="M54 22 l8 -14 a5 5 0 0 0 -8 -5 l-8 13 z" fill="#fff" stroke="#111827" stroke-width="3"/>
+      <!-- mane -->
+      <g stroke="#111827" stroke-width="5" stroke-linecap="round">
+        <path d="M42 14 v14"/>
+        <path d="M36 16 v12"/>
+        <path d="M48 16 v12"/>
+      </g>
+      <!-- eye and smile -->
+      <circle cx="36" cy="46" r="3.5" fill="#111827"/>
+      <path d="M33 57 q9 6 18 0" fill="none" stroke="#0ea5e9" stroke-width="4" stroke-linecap="round"/>
+      <!-- snout -->
+      <ellipse cx="52" cy="53" rx="7" ry="5" fill="#eef2f7" stroke="#111827" stroke-width="2"/>
+    </g>
+
+    <!-- legs -->
+    <g fill="#111827">
+      <rect x="82" y="92" width="6" height="18" rx="2"/>
+      <rect x="98" y="94" width="6" height="16" rx="2"/>
+      <rect x="130" y="94" width="6" height="16" rx="2"/>
+      <rect x="146" y="92" width="6" height="18" rx="2"/>
+    </g>
+
+    <!-- tail -->
+    <path d="M178 60 q16 6 16 20" fill="none" stroke="#111827" stroke-width="3"/>
+    <path d="M194 78 q-4 8 -10 10" fill="none" stroke="#111827" stroke-width="4" stroke-linecap="round"/>
+  </g>
+</svg>
+
+
