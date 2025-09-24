@@ -1,3 +1,21 @@
+// Function to shuffle choices and update answer index
+function shuffleChoices(choices, correctAnswerIndex) {
+  const shuffled = [...choices];
+  const correctAnswer = shuffled[correctAnswerIndex];
+  
+  // Fisher-Yates shuffle
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  
+  // Find new position of correct answer
+  const newAnswerIndex = shuffled.indexOf(correctAnswer);
+  
+  return { choices: shuffled, answerIndex: newAnswerIndex };
+}
+
+
 // Base handcrafted questions
 export const QUESTIONS = [
   // Handcrafted 9th-grade style starters
@@ -231,7 +249,10 @@ export function getRandomQuestions(count, excludeIds = [], gradeFilter) {
     picked = [...picked, ...draw(remaining, count - picked.length)];
   }
 
-  return picked;
+  return picked.map(q => {
+    const { choices, answerIndex } = shuffleChoices(q.choices, q.answerIndex);
+    return { ...q, choices, answerIndex };
+  });
 }
 
 
