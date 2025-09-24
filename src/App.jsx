@@ -3,6 +3,39 @@ import QuestionCard from './components/QuestionCard.jsx'
 import { getRandomQuestions, ensureGradePool } from './questions.js'
 import confetti from 'canvas-confetti'
 
+// Function to get leaderboard for a specific grade
+function getLeaderboardForGrade(leaderboard, grade) {
+  return leaderboard
+    .filter(entry => entry.grade === grade)
+    .sort((a, b) => (b.score / b.total) - (a.score / a.total))
+    .slice(0, 5); // Show top 5 for each grade
+}
+
+// Function to render a grade leaderboard
+function renderGradeLeaderboard(grade, entries) {
+  if (entries.length === 0) return null;
+  
+  return (
+    <div key={grade} style={{ background: '#f8fafc', borderRadius: 8, padding: 10, marginBottom: 12 }}>
+      <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 6, color: '#374151' }}>
+        Grade {grade}
+      </div>
+      <div style={{ display: 'grid', gap: 1, fontSize: 11 }}>
+        {entries.map((entry, i) => (
+          <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontWeight: i < 3 ? 600 : 400 }}>
+              {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i + 1}.`} {entry.name}
+            </span>
+            <span style={{ color: '#6b7280' }}>
+              {entry.score}/{entry.total}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
   const [index, setIndex] = useState(0)
   const [selected, setSelected] = useState(null)
@@ -247,30 +280,35 @@ export default function App() {
     )
   }
 
-  // Welcome screen - leaderboard and quiz info
+  // Welcome screen - grade-specific leaderboards and quiz info
   if (!started) {
+    // Get leaderboards for different grades
+    const leftGrades = [7, 8, 9];
+    const rightGrades = [10, 11, 12];
+    
     return (
       <div style={{ minHeight: '100vh', padding: 16, position: 'relative' }}>
-        {/* Left side - Leaderboard (fixed position) */}
-        {leaderboard.length > 0 && (
-          <div style={{ position: 'fixed', left: 16, top: 16, width: '200px', zIndex: 10 }}>
-            <div style={{ background: '#f8fafc', borderRadius: 8, padding: 12 }}>
-              <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 8 }}>🏆 Leaderboard</div>
-              <div style={{ display: 'grid', gap: 2, fontSize: 12 }}>
-                {leaderboard.slice(0, 8).map((entry, i) => (
-                  <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontWeight: i < 3 ? 600 : 400 }}>
-                      {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i + 1}.`} {entry.name}
-                    </span>
-                    <span style={{ color: '#6b7280' }}>
-                      {entry.score}/{entry.total}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
+        {/* Left side - Grades 7-9 Leaderboards */}
+        <div style={{ position: 'fixed', left: 16, top: 16, width: '180px', zIndex: 10 }}>
+          <div style={{ background: '#f8fafc', borderRadius: 8, padding: 12 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 8, color: '#374151' }}>🏆 Grades 7-9</div>
+            {leftGrades.map(gradeNum => {
+              const entries = getLeaderboardForGrade(leaderboard, gradeNum);
+              return renderGradeLeaderboard(gradeNum, entries);
+            })}
           </div>
-        )}
+        </div>
+
+        {/* Right side - Grades 10-12 Leaderboards */}
+        <div style={{ position: 'fixed', right: 16, top: 16, width: '180px', zIndex: 10 }}>
+          <div style={{ background: '#f8fafc', borderRadius: 8, padding: 12 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 8, color: '#374151' }}>🏆 Grades 10-12</div>
+            {rightGrades.map(gradeNum => {
+              const entries = getLeaderboardForGrade(leaderboard, gradeNum);
+              return renderGradeLeaderboard(gradeNum, entries);
+            })}
+          </div>
+        </div>
         
         {/* Center - Main content */}
         <div style={{ display: 'flex', justifyContent: 'center' }}>
