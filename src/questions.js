@@ -1,21 +1,3 @@
-// Function to shuffle choices and update answer index
-function shuffleChoices(choices, correctAnswerIndex) {
-  const shuffled = [...choices];
-  const correctAnswer = shuffled[correctAnswerIndex];
-  
-  // Fisher-Yates shuffle
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  
-  // Find new position of correct answer
-  const newAnswerIndex = shuffled.indexOf(correctAnswer);
-  
-  return { choices: shuffled, answerIndex: newAnswerIndex };
-}
-
-
 // Base handcrafted questions
 export const QUESTIONS = [
   // Handcrafted 9th-grade style starters
@@ -118,6 +100,52 @@ export const QUESTIONS = [
     choices: ["32 cm", "35 cm", "40 cm", "50 cm", "60 cm"],
     answerIndex: 2,
     explanation: "Scale factor 5/3 ⇒ 24×(5/3) = 40 cm.",
+  },
+  
+  // Visual questions with diagrams
+  {
+    id: 11,
+    grade: 9,
+    topic: "geometry-pythagoras",
+    difficulty: "medium",
+    prompt: "Using the diagram below, find the length of the hypotenuse:",
+    image: "./triangle-diagram.svg",
+    choices: ["15 cm", "13 cm", "21 cm", "√225 cm", "10 cm"],
+    answerIndex: 0,
+    explanation: "Using Pythagoras: c = √(9²+12²) = √(81+144) = √225 = 15 cm.",
+  },
+  {
+    id: 12,
+    grade: 9,
+    topic: "geometry-circle",
+    difficulty: "easy",
+    prompt: "What is the area of the circle shown below?",
+    image: "./circle-diagram.svg",
+    choices: ["49π cm²", "14π cm²", "28π cm²", "7π cm²", "154 cm²"],
+    answerIndex: 0,
+    explanation: "Area = πr² = π × 7² = 49π cm².",
+  },
+  {
+    id: 13,
+    grade: 9,
+    topic: "geometry-rectangle",
+    difficulty: "easy",
+    prompt: "Calculate the area of the rectangle shown:",
+    image: "./rectangle-diagram.svg",
+    choices: ["96 cm²", "40 cm²", "20 cm²", "48 cm²", "80 cm²"],
+    answerIndex: 0,
+    explanation: "Area = length × width = 12 × 8 = 96 cm².",
+  },
+  {
+    id: 14,
+    grade: 9,
+    topic: "geometry-slope",
+    difficulty: "medium",
+    prompt: "Using the graph below, what is the slope of the line?",
+    image: "./graph-diagram.svg",
+    choices: ["−1", "1", "−6/6", "−1/1", "−1 is correct"],
+    answerIndex: 0,
+    explanation: "m = (−1 − 5)/(4 − (−2)) = −6/6 = −1.",
   },
 ];
 
@@ -249,10 +277,7 @@ export function getRandomQuestions(count, excludeIds = [], gradeFilter) {
     picked = [...picked, ...draw(remaining, count - picked.length)];
   }
 
-  return picked.map(q => {
-    const { choices, answerIndex } = shuffleChoices(q.choices, q.answerIndex);
-    return { ...q, choices, answerIndex };
-  });
+  return picked;
 }
 
 

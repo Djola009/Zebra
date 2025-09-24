@@ -1,0 +1,14 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Circle -->
+  <circle cx="100" cy="100" r="80" fill="none" stroke="#2563eb" stroke-width="2"/>
+  
+  <!-- Radius line -->
+  <line x1="100" y1="100" x2="180" y2="100" stroke="#ef4444" stroke-width="2"/>
+  
+  <!-- Center point -->
+  <circle cx="100" cy="100" r="3" fill="#ef4444"/>
+  
+  <!-- Labels -->
+  <text x="140" y="95" text-anchor="middle" font-family="Arial" font-size="12" fill="#ef4444">r = 7 cm</text>
+  <text x="100" y="50" text-anchor="middle" font-family="Arial" font-size="14" fill="#374151">Find the area</text>
+</svg>

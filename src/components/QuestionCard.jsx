@@ -11,6 +11,24 @@ export default function QuestionCard({ q, selected, onSelect }) {
 {q.prompt}
         </ReactMarkdown>
       </div>
+      
+      {/* Image if present */}
+      {q.image && (
+        <div style={{ display: 'flex', justifyContent: 'center', margin: '16px 0' }}>
+          <img 
+            src={q.image} 
+            alt="Diagram" 
+            style={{ 
+              maxWidth: '100%', 
+              height: 'auto', 
+              border: '1px solid #e5e7eb',
+              borderRadius: '8px',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+            }} 
+          />
+        </div>
+      )}
+      
       <div style={{ display: "grid", gap: 8 }}>
         {q.choices.map((c, idx) => (
           <button
