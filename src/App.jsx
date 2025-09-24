@@ -185,13 +185,31 @@ export default function App() {
           <div style={{ display: 'flex', justifyContent: 'center', gap: 8 }}>
           <button
             onClick={() => window.location.reload()}
-            style={{ padding: '10px 14px', borderRadius: 8, border: 'none', background: '#2563eb', color: 'white', cursor: 'pointer' }}
+            style={{ 
+              padding: '10px 14px', 
+              borderRadius: 8, 
+              border: '2px solid #000000', 
+              background: 'repeating-linear-gradient(45deg, #2563eb 0px, #2563eb 8px, #1d4ed8 8px, #1d4ed8 16px)', 
+              color: 'white', 
+              cursor: 'pointer',
+              fontWeight: 600,
+              boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+            }}
           >
             Try another set
           </button>
             <button
               onClick={() => { try { localStorage.removeItem('zebra_recent_ids') } catch {} ; window.location.reload() }}
-              style={{ padding: '10px 14px', borderRadius: 8, border: '1px solid #cbd5e1', background: 'white', color: '#0f172a', cursor: 'pointer' }}
+              style={{ 
+                padding: '10px 14px', 
+                borderRadius: 8, 
+                border: '2px solid #000000', 
+                background: 'repeating-linear-gradient(45deg, #ffffff 0px, #ffffff 8px, #f3f4f6 8px, #f3f4f6 16px)', 
+                color: '#0f172a', 
+                cursor: 'pointer',
+                fontWeight: 600,
+                boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+              }}
             >
               Reset pool
             </button>
@@ -241,11 +259,12 @@ export default function App() {
                   style={{ 
                     padding: '10px 16px', 
                     borderRadius: 8, 
-                    border: grade===g? '2px solid #2563eb':'1px solid #cbd5e1', 
-                    background: grade===g? '#eef2ff':'white', 
+                    border: grade===g? '2px solid #000000':'2px solid #cbd5e1', 
+                    background: grade===g? 'repeating-linear-gradient(45deg, #eef2ff 0px, #eef2ff 8px, #dbeafe 8px, #dbeafe 16px)':'repeating-linear-gradient(45deg, #ffffff 0px, #ffffff 8px, #f9fafb 8px, #f9fafb 16px)', 
                     cursor: 'pointer',
                     fontSize: 14,
-                    fontWeight: grade===g? 600: 400
+                    fontWeight: grade===g? 600: 400,
+                    boxShadow: '0 1px 2px rgba(0,0,0,0.1)'
                   }}>
                   Grade {g}
                 </button>
@@ -259,12 +278,13 @@ export default function App() {
             style={{ 
               padding: '12px 24px', 
               borderRadius: 8, 
-              border: 'none', 
-              background: grade === null ? '#9ca3af' : '#16a34a', 
+              border: grade === null ? 'none' : '2px solid #000000', 
+              background: grade === null ? '#9ca3af' : 'repeating-linear-gradient(45deg, #16a34a 0px, #16a34a 8px, #15803d 8px, #15803d 16px)', 
               color: 'white', 
               cursor: grade === null ? 'not-allowed' : 'pointer',
               fontSize: 16,
-              fontWeight: 600
+              fontWeight: 600,
+              boxShadow: grade === null ? 'none' : '0 2px 4px rgba(0,0,0,0.2)'
             }}
           >
             Continue
@@ -290,8 +310,24 @@ export default function App() {
       <div style={{ minHeight: '100vh', padding: 16, position: 'relative' }}>
         {/* Left side - Grades 7-9 Leaderboards */}
         <div style={{ position: 'fixed', left: 16, top: 16, width: '240px', zIndex: 10 }}>
-          <div style={{ background: '#f8fafc', borderRadius: 8, padding: 16 }}>
-            <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 12, color: '#374151' }}>🏆 Grades 7-9</div>
+          <div style={{ 
+            background: 'repeating-linear-gradient(45deg, #f8fafc 0px, #f8fafc 15px, #e9ecef 15px, #e9ecef 30px)', 
+            borderRadius: 8, 
+            padding: 16,
+            border: '2px solid #000000',
+            boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+          }}>
+            <div style={{ 
+              fontSize: 16, 
+              fontWeight: 600, 
+              marginBottom: 12, 
+              color: '#374151',
+              background: 'linear-gradient(90deg, #000000 0%, #000000 50%, #ffffff 50%, #ffffff 100%)',
+              backgroundSize: '20px 100%',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text'
+            }}>🏆 Grades 7-9</div>
             {leftGrades.map(gradeNum => {
               const entries = getLeaderboardForGrade(leaderboard, gradeNum);
               return renderGradeLeaderboard(gradeNum, entries);
@@ -301,8 +337,24 @@ export default function App() {
 
         {/* Right side - Grades 10-12 Leaderboards */}
         <div style={{ position: 'fixed', right: 16, top: 16, width: '240px', zIndex: 10 }}>
-          <div style={{ background: '#f8fafc', borderRadius: 8, padding: 16 }}>
-            <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 12, color: '#374151' }}>🏆 Grades 10-12</div>
+          <div style={{ 
+            background: 'repeating-linear-gradient(45deg, #f8fafc 0px, #f8fafc 15px, #e9ecef 15px, #e9ecef 30px)', 
+            borderRadius: 8, 
+            padding: 16,
+            border: '2px solid #000000',
+            boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+          }}>
+            <div style={{ 
+              fontSize: 16, 
+              fontWeight: 600, 
+              marginBottom: 12, 
+              color: '#374151',
+              background: 'linear-gradient(90deg, #000000 0%, #000000 50%, #ffffff 50%, #ffffff 100%)',
+              backgroundSize: '20px 100%',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text'
+            }}>🏆 Grades 10-12</div>
             {rightGrades.map(gradeNum => {
               const entries = getLeaderboardForGrade(leaderboard, gradeNum);
               return renderGradeLeaderboard(gradeNum, entries);
@@ -325,13 +377,31 @@ export default function App() {
             <div style={{ display: 'flex', justifyContent: 'center', gap: 8 }}>
               <button
                 onClick={() => setStarted(true)}
-                style={{ padding: '10px 16px', borderRadius: 8, border: 'none', background: '#16a34a', color: 'white', cursor: 'pointer' }}
+                style={{ 
+                  padding: '10px 16px', 
+                  borderRadius: 8, 
+                  border: '2px solid #000000', 
+                  background: 'repeating-linear-gradient(45deg, #16a34a 0px, #16a34a 8px, #15803d 8px, #15803d 16px)', 
+                  color: 'white', 
+                  cursor: 'pointer',
+                  fontWeight: 600,
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+                }}
               >
                 Start quiz
               </button>
               <button
                 onClick={() => { try { localStorage.removeItem('zebra_recent_ids') } catch {} }}
-                style={{ padding: '10px 16px', borderRadius: 8, border: '1px solid #cbd5e1', background: 'white', color: '#0f172a', cursor: 'pointer' }}
+                style={{ 
+                  padding: '10px 16px', 
+                  borderRadius: 8, 
+                  border: '2px solid #000000', 
+                  background: 'repeating-linear-gradient(45deg, #ffffff 0px, #ffffff 8px, #f3f4f6 8px, #f3f4f6 16px)', 
+                  color: '#0f172a', 
+                  cursor: 'pointer',
+                  fontWeight: 600,
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+                }}
               >
                 Reset pool
               </button>
@@ -344,9 +414,32 @@ export default function App() {
 
   return (
     <div style={{ maxWidth: 720, margin: '40px auto', padding: 16 }}>
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-        <div style={{ fontSize: 22, fontWeight: 700 }}>Zebra Stripes Math Challenge</div>
-        <div>
+      <header style={{ 
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        alignItems: 'center', 
+        marginBottom: 16,
+        padding: '12px 16px',
+        borderRadius: 8,
+        background: 'repeating-linear-gradient(45deg, #f8f9fa 0px, #f8f9fa 15px, #e9ecef 15px, #e9ecef 30px)',
+        border: '2px solid #000000'
+      }}>
+        <div style={{ 
+          fontSize: 22, 
+          fontWeight: 700,
+          background: 'linear-gradient(90deg, #000000 0%, #000000 50%, #ffffff 50%, #ffffff 100%)',
+          backgroundSize: '20px 100%',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text'
+        }}>Zebra Stripes Math Challenge</div>
+        <div style={{
+          padding: '4px 8px',
+          borderRadius: 4,
+          background: 'repeating-linear-gradient(0deg, #ffffff 0px, #ffffff 8px, #000000 8px, #000000 16px)',
+          color: '#ffffff',
+          fontWeight: 600
+        }}>
           Q {index + 1}/{total} • Score {score}
         </div>
       </header>
@@ -361,10 +454,12 @@ export default function App() {
             style={{
               padding: '10px 14px',
               borderRadius: 8,
-              border: 'none',
-              background: selected == null ? '#ddd' : '#2563eb',
+              border: selected == null ? 'none' : '2px solid #000000',
+              background: selected == null ? '#ddd' : 'repeating-linear-gradient(45deg, #2563eb 0px, #2563eb 8px, #1d4ed8 8px, #1d4ed8 16px)',
               color: 'white',
               cursor: selected == null ? 'not-allowed' : 'pointer',
+              fontWeight: 600,
+              boxShadow: selected == null ? 'none' : '0 2px 4px rgba(0,0,0,0.2)'
             }}
           >
             Submit
@@ -375,10 +470,12 @@ export default function App() {
             style={{
               padding: '10px 14px',
               borderRadius: 8,
-              border: 'none',
-              background: '#16a34a',
+              border: '2px solid #000000',
+              background: 'repeating-linear-gradient(45deg, #16a34a 0px, #16a34a 8px, #15803d 8px, #15803d 16px)',
               color: 'white',
               cursor: 'pointer',
+              fontWeight: 600,
+              boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
             }}
           >
             {index + 1 < total ? 'Next' : 'Finish'}
