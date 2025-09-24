@@ -16,8 +16,24 @@ function renderGradeLeaderboard(grade, entries) {
   if (entries.length === 0) return null;
   
   return (
-    <div key={grade} style={{ background: '#f8fafc', borderRadius: 8, padding: 14, marginBottom: 16 }}>
-      <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 8, color: '#374151' }}>
+    <div key={grade} style={{ 
+      background: 'rgba(255, 255, 255, 0.9)', 
+      borderRadius: 8, 
+      padding: 14, 
+      marginBottom: 16,
+      border: '1px solid #000000',
+      boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+    }}>
+      <div style={{ 
+        fontSize: 14, 
+        fontWeight: 700, 
+        marginBottom: 8, 
+        color: '#000000',
+        background: 'rgba(0, 0, 0, 0.1)',
+        padding: '2px 6px',
+        borderRadius: 4,
+        textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
+      }}>
         Grade {grade}
       </div>
       <div style={{ display: 'grid', gap: 3, fontSize: 13 }}>
@@ -311,7 +327,7 @@ export default function App() {
         {/* Left side - Grades 7-9 Leaderboards */}
         <div style={{ position: 'fixed', left: 16, top: 16, width: '240px', zIndex: 10 }}>
           <div style={{ 
-            background: 'repeating-linear-gradient(45deg, #f8fafc 0px, #f8fafc 15px, #e9ecef 15px, #e9ecef 30px)', 
+            background: 'repeating-linear-gradient(45deg, #ffffff 0px, #ffffff 12px, #f0f0f0 12px, #f0f0f0 24px)', 
             borderRadius: 8, 
             padding: 16,
             border: '2px solid #000000',
@@ -319,14 +335,14 @@ export default function App() {
           }}>
             <div style={{ 
               fontSize: 16, 
-              fontWeight: 600, 
+              fontWeight: 700, 
               marginBottom: 12, 
-              color: '#374151',
-              background: 'linear-gradient(90deg, #000000 0%, #000000 50%, #ffffff 50%, #ffffff 100%)',
-              backgroundSize: '20px 100%',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text'
+              color: '#000000',
+              background: 'rgba(255, 255, 255, 0.95)',
+              padding: '4px 8px',
+              borderRadius: 4,
+              border: '1px solid #000000',
+              textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
             }}>🏆 Grades 7-9</div>
             {leftGrades.map(gradeNum => {
               const entries = getLeaderboardForGrade(leaderboard, gradeNum);
@@ -338,7 +354,7 @@ export default function App() {
         {/* Right side - Grades 10-12 Leaderboards */}
         <div style={{ position: 'fixed', right: 16, top: 16, width: '240px', zIndex: 10 }}>
           <div style={{ 
-            background: 'repeating-linear-gradient(45deg, #f8fafc 0px, #f8fafc 15px, #e9ecef 15px, #e9ecef 30px)', 
+            background: 'repeating-linear-gradient(45deg, #ffffff 0px, #ffffff 12px, #f0f0f0 12px, #f0f0f0 24px)', 
             borderRadius: 8, 
             padding: 16,
             border: '2px solid #000000',
@@ -346,14 +362,14 @@ export default function App() {
           }}>
             <div style={{ 
               fontSize: 16, 
-              fontWeight: 600, 
+              fontWeight: 700, 
               marginBottom: 12, 
-              color: '#374151',
-              background: 'linear-gradient(90deg, #000000 0%, #000000 50%, #ffffff 50%, #ffffff 100%)',
-              backgroundSize: '20px 100%',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text'
+              color: '#000000',
+              background: 'rgba(255, 255, 255, 0.95)',
+              padding: '4px 8px',
+              borderRadius: 4,
+              border: '1px solid #000000',
+              textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
             }}>🏆 Grades 10-12</div>
             {rightGrades.map(gradeNum => {
               const entries = getLeaderboardForGrade(leaderboard, gradeNum);
@@ -421,24 +437,28 @@ export default function App() {
         marginBottom: 16,
         padding: '12px 16px',
         borderRadius: 8,
-        background: 'repeating-linear-gradient(45deg, #f8f9fa 0px, #f8f9fa 15px, #e9ecef 15px, #e9ecef 30px)',
-        border: '2px solid #000000'
+        background: 'repeating-linear-gradient(45deg, #ffffff 0px, #ffffff 12px, #f0f0f0 12px, #f0f0f0 24px)',
+        border: '2px solid #000000',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
       }}>
         <div style={{ 
           fontSize: 22, 
           fontWeight: 700,
-          background: 'linear-gradient(90deg, #000000 0%, #000000 50%, #ffffff 50%, #ffffff 100%)',
-          backgroundSize: '20px 100%',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          backgroundClip: 'text'
+          color: '#000000',
+          textShadow: '-1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff, 1px 1px 0 #ffffff, 0 0 3px rgba(0,0,0,0.8)',
+          background: 'rgba(255, 255, 255, 0.9)',
+          padding: '4px 8px',
+          borderRadius: 4,
+          border: '1px solid #000000'
         }}>Zebra Stripes Math Challenge</div>
         <div style={{
           padding: '4px 8px',
           borderRadius: 4,
-          background: 'repeating-linear-gradient(0deg, #ffffff 0px, #ffffff 8px, #000000 8px, #000000 16px)',
+          background: 'rgba(0, 0, 0, 0.9)',
           color: '#ffffff',
-          fontWeight: 600
+          fontWeight: 600,
+          border: '1px solid #000000',
+          textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
         }}>
           Q {index + 1}/{total} • Score {score}
         </div>
