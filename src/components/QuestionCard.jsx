@@ -3,47 +3,9 @@ import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
 import 'katex/dist/katex.min.css'
 
-// Function to render difficulty stars
-function renderDifficultyStars(difficulty) {
-  const starCount = difficulty === 'easy' ? 1 : difficulty === 'medium' ? 3 : 5;
-  const stars = [];
-  
-  for (let i = 0; i < 5; i++) {
-    stars.push(
-      <span key={i} style={{ 
-        color: i < starCount ? '#fbbf24' : '#d1d5db',
-        fontSize: '16px',
-        marginRight: '2px'
-      }}>
-        ⭐
-      </span>
-    );
-  }
-  
-  return (
-    <div style={{ 
-      display: 'flex', 
-      alignItems: 'center', 
-      gap: 8,
-      marginBottom: 8,
-      padding: '4px 8px',
-      background: 'rgba(255, 255, 255, 0.9)',
-      borderRadius: 4,
-      border: '1px solid #000000',
-      width: 'fit-content'
-    }}>
-      <span style={{ fontSize: 12, fontWeight: 600, color: '#374151' }}>
-        Difficulty:
-      </span>
-      {stars}
-    </div>
-  );
-}
-
 export default function QuestionCard({ q, selected, onSelect }) {
   return (
     <div style={{ display: "grid", gap: 12 }}>
-      {renderDifficultyStars(q.difficulty)}
       <div style={{ fontSize: 18, fontWeight: 600 }}>
         <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
 {q.prompt}
@@ -91,3 +53,5 @@ export default function QuestionCard({ q, selected, onSelect }) {
     </div>
   );
 }
+
+
