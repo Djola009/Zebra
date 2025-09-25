@@ -93,7 +93,155 @@ export default function App() {
   const [started, setStarted] = useState(false)
   const [welcomeShown, setWelcomeShown] = useState(false)
 
+  // Review mistakes mode state
+  const [mistakes, setMistakes] = useState([])
+  const [reviewMode, setReviewMode] = useState(false)
+  const [reviewIndex, setReviewIndex] = useState(0)
+
   function submit() {
+    if (submitted || selected == null) return
+    setSubmitted(true)
+    
+    const isCorrect = selected === q.answerIndex
+    if (!isCorrect) {
+      // Add mistake to the mistakes array
+      setMistakes(prev => [...prev, {
+        question: q,
+        selectedAnswer: selected,
+        correctAnswer: q.answerIndex,
+        explanation: q.explanation
+      }])
+    }
+    
+    if (isCorrect) setScore((s) => s + 1)
+    setPerTopic((prev) => {
+      const topic = q.topic || 'general'
+      const entry = prev[topic] || { correct: 0, total: 0 }
+      return {
+        ...prev,
+        [topic]: { correct: entry.correct + (isCorrect ? 1 : 0), total: entry.total + 1 },
+      }
+    })
+  }
+
+  // Review Mode screen
+  if (reviewMode) {
+    const reviewQuestion = mistakes[reviewIndex]
+    
+    return (
+      <div style={{ maxWidth: 720, margin: '40px auto', padding: 16 }}>
+        <header style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center', 
+          marginBottom: 16,
+          padding: '12px 16px',
+          borderRadius: 8,
+          background: 'repeating-linear-gradient(45deg, #ffffff 0px, #ffffff 12px, #f0f0f0 12px, #f0f0f0 24px)',
+          border: '2px solid #000000',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+        }}>
+          <div style={{ 
+            fontSize: 22, 
+            fontWeight: 700,
+            color: '#000000',
+            textShadow: '-1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff, 1px 1px 0 #ffffff, 0 0 3px rgba(0,0,0,0.8)',
+            background: 'rgba(255, 255, 255, 0.9)',
+            padding: '4px 8px',
+            borderRadius: 4,
+            border: '1px solid #000000'
+          }}>Review Mistakes</div>
+          <div style={{
+            padding: '4px 8px',
+            borderRadius: 4,
+            background: 'rgba(220, 38, 38, 0.9)',
+            color: '#ffffff',
+            fontWeight: 600,
+            border: '1px solid #000000',
+            textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
+          }}>
+            {reviewIndex + 1}/{mistakes.length}
+          </div>
+        </header>
+
+        <div style={{ 
+          background: 'rgba(254, 242, 242, 0.9)', 
+          padding: 16, 
+          borderRadius: 8, 
+          border: '2px solid #dc2626',
+          marginBottom: 16
+        }}>
+          <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 8, color: '#dc2626' }}>
+            ❌ You answered: {String.fromCharCode(65 + reviewQuestion.selectedAnswer)}
+          </div>
+          <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 8, color: '#16a34a' }}>
+            ✅ Correct answer: {String.fromCharCode(65 + reviewQuestion.correctAnswer)}
+          </div>
+        </div>
+
+        <QuestionCard q={reviewQuestion.question} selected={null} onSelect={() => {}} />
+
+        <div style={{ marginTop: 16, display: 'flex', justifyContent: 'space-between', gap: 8 }}>
+          <button
+            onClick={() => {
+              if (reviewIndex > 0) setReviewIndex(reviewIndex - 1)
+            }}
+            disabled={reviewIndex === 0}
+            style={{
+              padding: '10px 14px',
+              borderRadius: 8,
+              border: '2px solid #000000',
+              background: reviewIndex === 0 ? '#9ca3af' : 'repeating-linear-gradient(45deg, #6b7280 0px, #6b7280 8px, #4b5563 8px, #4b5563 16px)',
+              color: 'white',
+              cursor: reviewIndex === 0 ? 'not-allowed' : 'pointer',
+              fontWeight: 600,
+              boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+            }}
+          >
+            Previous
+          </button>
+          
+          <button
+            onClick={() => {
+              if (reviewIndex < mistakes.length - 1) {
+                setReviewIndex(reviewIndex + 1)
+              } else {
+                setReviewMode(false)
+                setReviewIndex(0)
+              }
+            }}
+            style={{
+              padding: '10px 14px',
+              borderRadius: 8,
+              border: '2px solid #000000',
+              background: 'repeating-linear-gradient(45deg, #16a34a 0px, #16a34a 8px, #15803d 8px, #15803d 16px)',
+              color: 'white',
+              cursor: 'pointer',
+              fontWeight: 600,
+              boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+            }}
+          >
+            {reviewIndex < mistakes.length - 1 ? 'Next' : 'Finish Review'}
+          </button>
+        </div>
+
+        <div style={{
+          marginTop: 16,
+          padding: 12,
+          borderRadius: 8,
+          background: '#fef3c7',
+          border: '1px solid #f59e0b',
+        }}>
+          <div style={{ fontWeight: 700, marginBottom: 6, color: '#92400e' }}>
+            Explanation:
+          </div>
+          <div style={{ color: '#92400e' }}>{reviewQuestion.explanation}</div>
+        </div>
+      </div>
+    )
+  }
+  
+  if (isCorrect) setScore((s) => s + 1)
     if (submitted || selected == null) return
     setSubmitted(true)
     if (selected === q.answerIndex) setScore((s) => s + 1)
@@ -105,6 +253,123 @@ export default function App() {
         [topic]: { correct: entry.correct + (selected === q.answerIndex ? 1 : 0), total: entry.total + 1 },
       }
     })
+  }
+
+  // Review Mode screen
+  if (reviewMode) {
+    const reviewQuestion = mistakes[reviewIndex]
+    
+    return (
+      <div style={{ maxWidth: 720, margin: '40px auto', padding: 16 }}>
+        <header style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center', 
+          marginBottom: 16,
+          padding: '12px 16px',
+          borderRadius: 8,
+          background: 'repeating-linear-gradient(45deg, #ffffff 0px, #ffffff 12px, #f0f0f0 12px, #f0f0f0 24px)',
+          border: '2px solid #000000',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+        }}>
+          <div style={{ 
+            fontSize: 22, 
+            fontWeight: 700,
+            color: '#000000',
+            textShadow: '-1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff, 1px 1px 0 #ffffff, 0 0 3px rgba(0,0,0,0.8)',
+            background: 'rgba(255, 255, 255, 0.9)',
+            padding: '4px 8px',
+            borderRadius: 4,
+            border: '1px solid #000000'
+          }}>Review Mistakes</div>
+          <div style={{
+            padding: '4px 8px',
+            borderRadius: 4,
+            background: 'rgba(220, 38, 38, 0.9)',
+            color: '#ffffff',
+            fontWeight: 600,
+            border: '1px solid #000000',
+            textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
+          }}>
+            {reviewIndex + 1}/{mistakes.length}
+          </div>
+        </header>
+
+        <div style={{ 
+          background: 'rgba(254, 242, 242, 0.9)', 
+          padding: 16, 
+          borderRadius: 8, 
+          border: '2px solid #dc2626',
+          marginBottom: 16
+        }}>
+          <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 8, color: '#dc2626' }}>
+            ❌ You answered: {String.fromCharCode(65 + reviewQuestion.selectedAnswer)}
+          </div>
+          <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 8, color: '#16a34a' }}>
+            ✅ Correct answer: {String.fromCharCode(65 + reviewQuestion.correctAnswer)}
+          </div>
+        </div>
+
+        <QuestionCard q={reviewQuestion.question} selected={null} onSelect={() => {}} />
+
+        <div style={{ marginTop: 16, display: 'flex', justifyContent: 'space-between', gap: 8 }}>
+          <button
+            onClick={() => {
+              if (reviewIndex > 0) setReviewIndex(reviewIndex - 1)
+            }}
+            disabled={reviewIndex === 0}
+            style={{
+              padding: '10px 14px',
+              borderRadius: 8,
+              border: '2px solid #000000',
+              background: reviewIndex === 0 ? '#9ca3af' : 'repeating-linear-gradient(45deg, #6b7280 0px, #6b7280 8px, #4b5563 8px, #4b5563 16px)',
+              color: 'white',
+              cursor: reviewIndex === 0 ? 'not-allowed' : 'pointer',
+              fontWeight: 600,
+              boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+            }}
+          >
+            Previous
+          </button>
+          
+          <button
+            onClick={() => {
+              if (reviewIndex < mistakes.length - 1) {
+                setReviewIndex(reviewIndex + 1)
+              } else {
+                setReviewMode(false)
+                setReviewIndex(0)
+              }
+            }}
+            style={{
+              padding: '10px 14px',
+              borderRadius: 8,
+              border: '2px solid #000000',
+              background: 'repeating-linear-gradient(45deg, #16a34a 0px, #16a34a 8px, #15803d 8px, #15803d 16px)',
+              color: 'white',
+              cursor: 'pointer',
+              fontWeight: 600,
+              boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+            }}
+          >
+            {reviewIndex < mistakes.length - 1 ? 'Next' : 'Finish Review'}
+          </button>
+        </div>
+
+        <div style={{
+          marginTop: 16,
+          padding: 12,
+          borderRadius: 8,
+          background: '#fef3c7',
+          border: '1px solid #f59e0b',
+        }}>
+          <div style={{ fontWeight: 700, marginBottom: 6, color: '#92400e' }}>
+            Explanation:
+          </div>
+          <div style={{ color: '#92400e' }}>{reviewQuestion.explanation}</div>
+        </div>
+      </div>
+    )
   }
 
   function next() {
@@ -147,6 +412,123 @@ export default function App() {
     }
   }
 
+  // Review Mode screen
+  if (reviewMode) {
+    const reviewQuestion = mistakes[reviewIndex]
+    
+    return (
+      <div style={{ maxWidth: 720, margin: '40px auto', padding: 16 }}>
+        <header style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center', 
+          marginBottom: 16,
+          padding: '12px 16px',
+          borderRadius: 8,
+          background: 'repeating-linear-gradient(45deg, #ffffff 0px, #ffffff 12px, #f0f0f0 12px, #f0f0f0 24px)',
+          border: '2px solid #000000',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+        }}>
+          <div style={{ 
+            fontSize: 22, 
+            fontWeight: 700,
+            color: '#000000',
+            textShadow: '-1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff, 1px 1px 0 #ffffff, 0 0 3px rgba(0,0,0,0.8)',
+            background: 'rgba(255, 255, 255, 0.9)',
+            padding: '4px 8px',
+            borderRadius: 4,
+            border: '1px solid #000000'
+          }}>Review Mistakes</div>
+          <div style={{
+            padding: '4px 8px',
+            borderRadius: 4,
+            background: 'rgba(220, 38, 38, 0.9)',
+            color: '#ffffff',
+            fontWeight: 600,
+            border: '1px solid #000000',
+            textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
+          }}>
+            {reviewIndex + 1}/{mistakes.length}
+          </div>
+        </header>
+
+        <div style={{ 
+          background: 'rgba(254, 242, 242, 0.9)', 
+          padding: 16, 
+          borderRadius: 8, 
+          border: '2px solid #dc2626',
+          marginBottom: 16
+        }}>
+          <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 8, color: '#dc2626' }}>
+            ❌ You answered: {String.fromCharCode(65 + reviewQuestion.selectedAnswer)}
+          </div>
+          <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 8, color: '#16a34a' }}>
+            ✅ Correct answer: {String.fromCharCode(65 + reviewQuestion.correctAnswer)}
+          </div>
+        </div>
+
+        <QuestionCard q={reviewQuestion.question} selected={null} onSelect={() => {}} />
+
+        <div style={{ marginTop: 16, display: 'flex', justifyContent: 'space-between', gap: 8 }}>
+          <button
+            onClick={() => {
+              if (reviewIndex > 0) setReviewIndex(reviewIndex - 1)
+            }}
+            disabled={reviewIndex === 0}
+            style={{
+              padding: '10px 14px',
+              borderRadius: 8,
+              border: '2px solid #000000',
+              background: reviewIndex === 0 ? '#9ca3af' : 'repeating-linear-gradient(45deg, #6b7280 0px, #6b7280 8px, #4b5563 8px, #4b5563 16px)',
+              color: 'white',
+              cursor: reviewIndex === 0 ? 'not-allowed' : 'pointer',
+              fontWeight: 600,
+              boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+            }}
+          >
+            Previous
+          </button>
+          
+          <button
+            onClick={() => {
+              if (reviewIndex < mistakes.length - 1) {
+                setReviewIndex(reviewIndex + 1)
+              } else {
+                setReviewMode(false)
+                setReviewIndex(0)
+              }
+            }}
+            style={{
+              padding: '10px 14px',
+              borderRadius: 8,
+              border: '2px solid #000000',
+              background: 'repeating-linear-gradient(45deg, #16a34a 0px, #16a34a 8px, #15803d 8px, #15803d 16px)',
+              color: 'white',
+              cursor: 'pointer',
+              fontWeight: 600,
+              boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+            }}
+          >
+            {reviewIndex < mistakes.length - 1 ? 'Next' : 'Finish Review'}
+          </button>
+        </div>
+
+        <div style={{
+          marginTop: 16,
+          padding: 12,
+          borderRadius: 8,
+          background: '#fef3c7',
+          border: '1px solid #f59e0b',
+        }}>
+          <div style={{ fontWeight: 700, marginBottom: 6, color: '#92400e' }}>
+            Explanation:
+          </div>
+          <div style={{ color: '#92400e' }}>{reviewQuestion.explanation}</div>
+        </div>
+      </div>
+    )
+  }
+
   useEffect(() => {
     if (!finished) return
     // Confetti intensity scales with score percentage
@@ -184,6 +566,123 @@ export default function App() {
     const topicName = top.topic.replace(/-/g, ' ')
     const follow = entries.length > 1 ? ` You also show promise in ${entries[1].topic.replace(/-/g, ' ')}.` : ''
     return `From the outside, you look ${good} at ${topicName}.${follow}`
+  }
+
+  // Review Mode screen
+  if (reviewMode) {
+    const reviewQuestion = mistakes[reviewIndex]
+    
+    return (
+      <div style={{ maxWidth: 720, margin: '40px auto', padding: 16 }}>
+        <header style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center', 
+          marginBottom: 16,
+          padding: '12px 16px',
+          borderRadius: 8,
+          background: 'repeating-linear-gradient(45deg, #ffffff 0px, #ffffff 12px, #f0f0f0 12px, #f0f0f0 24px)',
+          border: '2px solid #000000',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+        }}>
+          <div style={{ 
+            fontSize: 22, 
+            fontWeight: 700,
+            color: '#000000',
+            textShadow: '-1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff, 1px 1px 0 #ffffff, 0 0 3px rgba(0,0,0,0.8)',
+            background: 'rgba(255, 255, 255, 0.9)',
+            padding: '4px 8px',
+            borderRadius: 4,
+            border: '1px solid #000000'
+          }}>Review Mistakes</div>
+          <div style={{
+            padding: '4px 8px',
+            borderRadius: 4,
+            background: 'rgba(220, 38, 38, 0.9)',
+            color: '#ffffff',
+            fontWeight: 600,
+            border: '1px solid #000000',
+            textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
+          }}>
+            {reviewIndex + 1}/{mistakes.length}
+          </div>
+        </header>
+
+        <div style={{ 
+          background: 'rgba(254, 242, 242, 0.9)', 
+          padding: 16, 
+          borderRadius: 8, 
+          border: '2px solid #dc2626',
+          marginBottom: 16
+        }}>
+          <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 8, color: '#dc2626' }}>
+            ❌ You answered: {String.fromCharCode(65 + reviewQuestion.selectedAnswer)}
+          </div>
+          <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 8, color: '#16a34a' }}>
+            ✅ Correct answer: {String.fromCharCode(65 + reviewQuestion.correctAnswer)}
+          </div>
+        </div>
+
+        <QuestionCard q={reviewQuestion.question} selected={null} onSelect={() => {}} />
+
+        <div style={{ marginTop: 16, display: 'flex', justifyContent: 'space-between', gap: 8 }}>
+          <button
+            onClick={() => {
+              if (reviewIndex > 0) setReviewIndex(reviewIndex - 1)
+            }}
+            disabled={reviewIndex === 0}
+            style={{
+              padding: '10px 14px',
+              borderRadius: 8,
+              border: '2px solid #000000',
+              background: reviewIndex === 0 ? '#9ca3af' : 'repeating-linear-gradient(45deg, #6b7280 0px, #6b7280 8px, #4b5563 8px, #4b5563 16px)',
+              color: 'white',
+              cursor: reviewIndex === 0 ? 'not-allowed' : 'pointer',
+              fontWeight: 600,
+              boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+            }}
+          >
+            Previous
+          </button>
+          
+          <button
+            onClick={() => {
+              if (reviewIndex < mistakes.length - 1) {
+                setReviewIndex(reviewIndex + 1)
+              } else {
+                setReviewMode(false)
+                setReviewIndex(0)
+              }
+            }}
+            style={{
+              padding: '10px 14px',
+              borderRadius: 8,
+              border: '2px solid #000000',
+              background: 'repeating-linear-gradient(45deg, #16a34a 0px, #16a34a 8px, #15803d 8px, #15803d 16px)',
+              color: 'white',
+              cursor: 'pointer',
+              fontWeight: 600,
+              boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+            }}
+          >
+            {reviewIndex < mistakes.length - 1 ? 'Next' : 'Finish Review'}
+          </button>
+        </div>
+
+        <div style={{
+          marginTop: 16,
+          padding: 12,
+          borderRadius: 8,
+          background: '#fef3c7',
+          border: '1px solid #f59e0b',
+        }}>
+          <div style={{ fontWeight: 700, marginBottom: 6, color: '#92400e' }}>
+            Explanation:
+          </div>
+          <div style={{ color: '#92400e' }}>{reviewQuestion.explanation}</div>
+        </div>
+      </div>
+    )
   }
 
   if (finished) {
@@ -228,8 +727,145 @@ export default function App() {
               }}
             >
               Reset pool
+            }
+          }
+          
+          {mistakes.length > 0 && (
+            <button
+              onClick={() => setReviewMode(true)}
+              style={{ 
+                padding: '10px 14px', 
+                borderRadius: 8, 
+                border: '2px solid #000000', 
+                background: 'repeating-linear-gradient(45deg, #dc2626 0px, #dc2626 8px, #b91c1c 8px, #b91c1c 16px)', 
+                color: 'white', 
+                cursor: 'pointer',
+                fontWeight: 600,
+                boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+              }}
+            >
+              Review Mistakes ({mistakes.length})
+            </button>
+          )}
             </button>
           </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Review Mode screen
+  if (reviewMode) {
+    const reviewQuestion = mistakes[reviewIndex]
+    
+    return (
+      <div style={{ maxWidth: 720, margin: '40px auto', padding: 16 }}>
+        <header style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center', 
+          marginBottom: 16,
+          padding: '12px 16px',
+          borderRadius: 8,
+          background: 'repeating-linear-gradient(45deg, #ffffff 0px, #ffffff 12px, #f0f0f0 12px, #f0f0f0 24px)',
+          border: '2px solid #000000',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+        }}>
+          <div style={{ 
+            fontSize: 22, 
+            fontWeight: 700,
+            color: '#000000',
+            textShadow: '-1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff, 1px 1px 0 #ffffff, 0 0 3px rgba(0,0,0,0.8)',
+            background: 'rgba(255, 255, 255, 0.9)',
+            padding: '4px 8px',
+            borderRadius: 4,
+            border: '1px solid #000000'
+          }}>Review Mistakes</div>
+          <div style={{
+            padding: '4px 8px',
+            borderRadius: 4,
+            background: 'rgba(220, 38, 38, 0.9)',
+            color: '#ffffff',
+            fontWeight: 600,
+            border: '1px solid #000000',
+            textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
+          }}>
+            {reviewIndex + 1}/{mistakes.length}
+          </div>
+        </header>
+
+        <div style={{ 
+          background: 'rgba(254, 242, 242, 0.9)', 
+          padding: 16, 
+          borderRadius: 8, 
+          border: '2px solid #dc2626',
+          marginBottom: 16
+        }}>
+          <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 8, color: '#dc2626' }}>
+            ❌ You answered: {String.fromCharCode(65 + reviewQuestion.selectedAnswer)}
+          </div>
+          <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 8, color: '#16a34a' }}>
+            ✅ Correct answer: {String.fromCharCode(65 + reviewQuestion.correctAnswer)}
+          </div>
+        </div>
+
+        <QuestionCard q={reviewQuestion.question} selected={null} onSelect={() => {}} />
+
+        <div style={{ marginTop: 16, display: 'flex', justifyContent: 'space-between', gap: 8 }}>
+          <button
+            onClick={() => {
+              if (reviewIndex > 0) setReviewIndex(reviewIndex - 1)
+            }}
+            disabled={reviewIndex === 0}
+            style={{
+              padding: '10px 14px',
+              borderRadius: 8,
+              border: '2px solid #000000',
+              background: reviewIndex === 0 ? '#9ca3af' : 'repeating-linear-gradient(45deg, #6b7280 0px, #6b7280 8px, #4b5563 8px, #4b5563 16px)',
+              color: 'white',
+              cursor: reviewIndex === 0 ? 'not-allowed' : 'pointer',
+              fontWeight: 600,
+              boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+            }}
+          >
+            Previous
+          </button>
+          
+          <button
+            onClick={() => {
+              if (reviewIndex < mistakes.length - 1) {
+                setReviewIndex(reviewIndex + 1)
+              } else {
+                setReviewMode(false)
+                setReviewIndex(0)
+              }
+            }}
+            style={{
+              padding: '10px 14px',
+              borderRadius: 8,
+              border: '2px solid #000000',
+              background: 'repeating-linear-gradient(45deg, #16a34a 0px, #16a34a 8px, #15803d 8px, #15803d 16px)',
+              color: 'white',
+              cursor: 'pointer',
+              fontWeight: 600,
+              boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+            }}
+          >
+            {reviewIndex < mistakes.length - 1 ? 'Next' : 'Finish Review'}
+          </button>
+        </div>
+
+        <div style={{
+          marginTop: 16,
+          padding: 12,
+          borderRadius: 8,
+          background: '#fef3c7',
+          border: '1px solid #f59e0b',
+        }}>
+          <div style={{ fontWeight: 700, marginBottom: 6, color: '#92400e' }}>
+            Explanation:
+          </div>
+          <div style={{ color: '#92400e' }}>{reviewQuestion.explanation}</div>
         </div>
       </div>
     )
@@ -311,6 +947,123 @@ export default function App() {
               Please select a grade to continue
             </div>
           )}
+        </div>
+      </div>
+    )
+  }
+
+  // Review Mode screen
+  if (reviewMode) {
+    const reviewQuestion = mistakes[reviewIndex]
+    
+    return (
+      <div style={{ maxWidth: 720, margin: '40px auto', padding: 16 }}>
+        <header style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center', 
+          marginBottom: 16,
+          padding: '12px 16px',
+          borderRadius: 8,
+          background: 'repeating-linear-gradient(45deg, #ffffff 0px, #ffffff 12px, #f0f0f0 12px, #f0f0f0 24px)',
+          border: '2px solid #000000',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+        }}>
+          <div style={{ 
+            fontSize: 22, 
+            fontWeight: 700,
+            color: '#000000',
+            textShadow: '-1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff, 1px 1px 0 #ffffff, 0 0 3px rgba(0,0,0,0.8)',
+            background: 'rgba(255, 255, 255, 0.9)',
+            padding: '4px 8px',
+            borderRadius: 4,
+            border: '1px solid #000000'
+          }}>Review Mistakes</div>
+          <div style={{
+            padding: '4px 8px',
+            borderRadius: 4,
+            background: 'rgba(220, 38, 38, 0.9)',
+            color: '#ffffff',
+            fontWeight: 600,
+            border: '1px solid #000000',
+            textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
+          }}>
+            {reviewIndex + 1}/{mistakes.length}
+          </div>
+        </header>
+
+        <div style={{ 
+          background: 'rgba(254, 242, 242, 0.9)', 
+          padding: 16, 
+          borderRadius: 8, 
+          border: '2px solid #dc2626',
+          marginBottom: 16
+        }}>
+          <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 8, color: '#dc2626' }}>
+            ❌ You answered: {String.fromCharCode(65 + reviewQuestion.selectedAnswer)}
+          </div>
+          <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 8, color: '#16a34a' }}>
+            ✅ Correct answer: {String.fromCharCode(65 + reviewQuestion.correctAnswer)}
+          </div>
+        </div>
+
+        <QuestionCard q={reviewQuestion.question} selected={null} onSelect={() => {}} />
+
+        <div style={{ marginTop: 16, display: 'flex', justifyContent: 'space-between', gap: 8 }}>
+          <button
+            onClick={() => {
+              if (reviewIndex > 0) setReviewIndex(reviewIndex - 1)
+            }}
+            disabled={reviewIndex === 0}
+            style={{
+              padding: '10px 14px',
+              borderRadius: 8,
+              border: '2px solid #000000',
+              background: reviewIndex === 0 ? '#9ca3af' : 'repeating-linear-gradient(45deg, #6b7280 0px, #6b7280 8px, #4b5563 8px, #4b5563 16px)',
+              color: 'white',
+              cursor: reviewIndex === 0 ? 'not-allowed' : 'pointer',
+              fontWeight: 600,
+              boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+            }}
+          >
+            Previous
+          </button>
+          
+          <button
+            onClick={() => {
+              if (reviewIndex < mistakes.length - 1) {
+                setReviewIndex(reviewIndex + 1)
+              } else {
+                setReviewMode(false)
+                setReviewIndex(0)
+              }
+            }}
+            style={{
+              padding: '10px 14px',
+              borderRadius: 8,
+              border: '2px solid #000000',
+              background: 'repeating-linear-gradient(45deg, #16a34a 0px, #16a34a 8px, #15803d 8px, #15803d 16px)',
+              color: 'white',
+              cursor: 'pointer',
+              fontWeight: 600,
+              boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+            }}
+          >
+            {reviewIndex < mistakes.length - 1 ? 'Next' : 'Finish Review'}
+          </button>
+        </div>
+
+        <div style={{
+          marginTop: 16,
+          padding: 12,
+          borderRadius: 8,
+          background: '#fef3c7',
+          border: '1px solid #f59e0b',
+        }}>
+          <div style={{ fontWeight: 700, marginBottom: 6, color: '#92400e' }}>
+            Explanation:
+          </div>
+          <div style={{ color: '#92400e' }}>{reviewQuestion.explanation}</div>
         </div>
       </div>
     )
@@ -420,9 +1173,146 @@ export default function App() {
                 }}
               >
                 Reset pool
+            }
+          }
+          
+          {mistakes.length > 0 && (
+            <button
+              onClick={() => setReviewMode(true)}
+              style={{ 
+                padding: '10px 14px', 
+                borderRadius: 8, 
+                border: '2px solid #000000', 
+                background: 'repeating-linear-gradient(45deg, #dc2626 0px, #dc2626 8px, #b91c1c 8px, #b91c1c 16px)', 
+                color: 'white', 
+                cursor: 'pointer',
+                fontWeight: 600,
+                boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+              }}
+            >
+              Review Mistakes ({mistakes.length})
+            </button>
+          )}
               </button>
             </div>
           </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Review Mode screen
+  if (reviewMode) {
+    const reviewQuestion = mistakes[reviewIndex]
+    
+    return (
+      <div style={{ maxWidth: 720, margin: '40px auto', padding: 16 }}>
+        <header style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center', 
+          marginBottom: 16,
+          padding: '12px 16px',
+          borderRadius: 8,
+          background: 'repeating-linear-gradient(45deg, #ffffff 0px, #ffffff 12px, #f0f0f0 12px, #f0f0f0 24px)',
+          border: '2px solid #000000',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+        }}>
+          <div style={{ 
+            fontSize: 22, 
+            fontWeight: 700,
+            color: '#000000',
+            textShadow: '-1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff, 1px 1px 0 #ffffff, 0 0 3px rgba(0,0,0,0.8)',
+            background: 'rgba(255, 255, 255, 0.9)',
+            padding: '4px 8px',
+            borderRadius: 4,
+            border: '1px solid #000000'
+          }}>Review Mistakes</div>
+          <div style={{
+            padding: '4px 8px',
+            borderRadius: 4,
+            background: 'rgba(220, 38, 38, 0.9)',
+            color: '#ffffff',
+            fontWeight: 600,
+            border: '1px solid #000000',
+            textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
+          }}>
+            {reviewIndex + 1}/{mistakes.length}
+          </div>
+        </header>
+
+        <div style={{ 
+          background: 'rgba(254, 242, 242, 0.9)', 
+          padding: 16, 
+          borderRadius: 8, 
+          border: '2px solid #dc2626',
+          marginBottom: 16
+        }}>
+          <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 8, color: '#dc2626' }}>
+            ❌ You answered: {String.fromCharCode(65 + reviewQuestion.selectedAnswer)}
+          </div>
+          <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 8, color: '#16a34a' }}>
+            ✅ Correct answer: {String.fromCharCode(65 + reviewQuestion.correctAnswer)}
+          </div>
+        </div>
+
+        <QuestionCard q={reviewQuestion.question} selected={null} onSelect={() => {}} />
+
+        <div style={{ marginTop: 16, display: 'flex', justifyContent: 'space-between', gap: 8 }}>
+          <button
+            onClick={() => {
+              if (reviewIndex > 0) setReviewIndex(reviewIndex - 1)
+            }}
+            disabled={reviewIndex === 0}
+            style={{
+              padding: '10px 14px',
+              borderRadius: 8,
+              border: '2px solid #000000',
+              background: reviewIndex === 0 ? '#9ca3af' : 'repeating-linear-gradient(45deg, #6b7280 0px, #6b7280 8px, #4b5563 8px, #4b5563 16px)',
+              color: 'white',
+              cursor: reviewIndex === 0 ? 'not-allowed' : 'pointer',
+              fontWeight: 600,
+              boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+            }}
+          >
+            Previous
+          </button>
+          
+          <button
+            onClick={() => {
+              if (reviewIndex < mistakes.length - 1) {
+                setReviewIndex(reviewIndex + 1)
+              } else {
+                setReviewMode(false)
+                setReviewIndex(0)
+              }
+            }}
+            style={{
+              padding: '10px 14px',
+              borderRadius: 8,
+              border: '2px solid #000000',
+              background: 'repeating-linear-gradient(45deg, #16a34a 0px, #16a34a 8px, #15803d 8px, #15803d 16px)',
+              color: 'white',
+              cursor: 'pointer',
+              fontWeight: 600,
+              boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+            }}
+          >
+            {reviewIndex < mistakes.length - 1 ? 'Next' : 'Finish Review'}
+          </button>
+        </div>
+
+        <div style={{
+          marginTop: 16,
+          padding: 12,
+          borderRadius: 8,
+          background: '#fef3c7',
+          border: '1px solid #f59e0b',
+        }}>
+          <div style={{ fontWeight: 700, marginBottom: 6, color: '#92400e' }}>
+            Explanation:
+          </div>
+          <div style={{ color: '#92400e' }}>{reviewQuestion.explanation}</div>
         </div>
       </div>
     )
